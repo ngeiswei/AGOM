@@ -158,7 +158,7 @@ function prodDistros(distro1, ...)
    local result = {}
    local arg = {...}
    for triple, prob in pairs(distro1) do
-      prodProb = 1
+      local prodProb = 1
       for i, distro in pairs(arg) do
          prodProb = prodProb * distro[triple]
       end
@@ -362,26 +362,28 @@ end
 -- a probability
 function finalDistro(context, modulator)
    -- Compute the distro of each constraint
-   conjunctMelodicMotionDistro = conjunctMelodicMotion(context)
-   acousticConsonanceDistro = acousticConsonance(context)
-   limitedMacroharmonyDistro = limitedMacroharmony(context)
-   centricityDistro = centricity(context)
+   local conjunctMelodicMotionDistro = conjunctMelodicMotion(context)
+   local acousticConsonanceDistro = acousticConsonance(context)
+   local limitedMacroharmonyDistro = limitedMacroharmony(context)
+   local centricityDistro = centricity(context)
 
    -- Mix each of them with the uniform distribution, depending on its
    -- intensity (controlled by the modulator)
-   conjunctMelodicMotionDM = uniformizeDistro(conjunctMelodicMotionDistro,
-                                              1 - modulator.conjunctMelodicMotion)
+   local conjunctMelodicMotionDM =
+      uniformizeDistro(conjunctMelodicMotionDistro,
+                       1 - modulator.conjunctMelodicMotion)
 
-   acousticConsonanceDM = uniformizeDistro(acousticConsonanceDistro,
-                                           1 - modulator.acousticConsonance)
-                                           
-   limitedMacroharmonyDM = uniformizeDistro(limitedMacroharmonyDistro,
-                                            1 - modulator.limitedMacroharmony)
-                                            
-   centricityDM = uniformizeDistro(centricityDistro,
-                                   1 - modulator.centricity)
-   
-   
+   local acousticConsonanceDM =
+      uniformizeDistro(acousticConsonanceDistro,
+                       1 - modulator.acousticConsonance)
+
+   local limitedMacroharmonyDM =
+      uniformizeDistro(limitedMacroharmonyDistro,
+                       1 - modulator.limitedMacroharmony)
+
+   local centricityDM =
+      uniformizeDistro(centricityDistro,
+                       1 - modulator.centricity)
 
    return normalizeDistro(prodDistros(conjunctMelodicMotionDM,
                                       acousticConsonanceDM,
