@@ -10,19 +10,19 @@ math.randomseed(1)
 
 -- Set of bass notes
 bass_notes = {}
-for bn=20,40 do
+for bn=2,4 do
    bass_notes[bn] = true
 end
 
 -- Set of mid notes
 mid_notes = {}
-for mn=40,60 do
+for mn=4,6 do
    mid_notes[mn] = true
 end
 
 -- Set of high notes
 high_notes = {}
-for tn=80,100 do
+for tn=8,10 do
    high_notes[tn] = true
 end
 
