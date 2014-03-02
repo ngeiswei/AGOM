@@ -417,6 +417,20 @@ end
 context = {}                 -- Hold the previous triplet of notes
 modulator = {}               -- Control the intensity of each contraint over time
 
+-- Clear patterns
+-- renoise.song().sequencer.pattern_sequence[]
+for i,p in pairs(renoise.song().sequencer.pattern_sequence) do
+   print(i, p)
+   renoise.song().sequencer.delete_sequence_at(1)
+end
+
+-- Create patterns
+for pi=1,number_of_patterns do
+   renoise.song().sequencer:insert_new_pattern_at(1)
+end
+renoise.song().sequencer:sort()
+
+-- Fill notes
 for pi=1,number_of_patterns do
    for li=1,pattern_length do
       -- Update modulator
