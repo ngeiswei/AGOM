@@ -3,26 +3,26 @@
 -- --------- --
 
 pattern_length = 64
-number_of_patterns = 10
+number_of_patterns = 16
 
 -- Set random seed
 math.randomseed(1)
 
 -- Set of bass notes
 bass_notes = {}
-for bn=2,4 do
+for bn=20,40 do
    bass_notes[bn] = true
 end
 
 -- Set of mid notes
 mid_notes = {}
-for mn=4,6 do
+for mn=40,60 do
    mid_notes[mn] = true
 end
 
 -- Set of high notes
 high_notes = {}
-for tn=8,10 do
+for tn=80,100 do
    high_notes[tn] = true
 end
 
@@ -417,12 +417,16 @@ end
 context = {}                 -- Hold the previous triplet of notes
 modulator = {}               -- Control the intensity of each contraint over time
 
--- Clear patterns
--- renoise.song().sequencer.pattern_sequence[]
-for i,p in pairs(renoise.song().sequencer.pattern_sequence) do
-   print(i, p)
-   renoise.song().sequencer.delete_sequence_at(1)
-end
+bass_instrument = 0
+mid_instrument = 1
+high_instrument = 2
+
+-- -- Clear patterns
+-- -- renoise.song().sequencer.pattern_sequence[]
+-- for i,p in pairs(renoise.song().sequencer.pattern_sequence) do
+--    print(i, p)
+--    renoise.song().sequencer.delete_sequence_at(1)
+-- end
 
 -- Create patterns
 for pi=1,number_of_patterns do
@@ -432,6 +436,7 @@ renoise.song().sequencer:sort()
 
 -- Fill notes
 for pi=1,number_of_patterns do
+   local pattern = renoise.song():pattern(pi)
    for li=1,pattern_length do
       -- Update modulator
       updateModulator(modulator, pi, li)
@@ -466,7 +471,23 @@ for pi=1,number_of_patterns do
             ", High note = ", noteInt2Str(triple.high_note))
 
       -- Renoise it down
-      -- TODO
+      bass_note_col = pattern.tracks[1]:line(li):note_column(1)
+      bass_note_col:clear()
+      bass_note_col.note_value = triple.bass_note
+      bass_note_col.instrument_value = bass_instrument
+      bass_note_col.volume_value = math.random(20, 100)
+
+      mid_note_col = pattern.tracks[2]:line(li):note_column(1)
+      mid_note_col:clear()
+      mid_note_col.note_value = triple.mid_note
+      mid_note_col.instrument_value = mid_instrument
+      mid_note_col.volume_value = math.random(20, 100)
+
+      high_note_col = pattern.tracks[3]:line(li):note_column(1)
+      high_note_col:clear()
+      high_note_col.note_value = triple.high_note
+      high_note_col.instrument_value = high_instrument
+      high_note_col.volume_value = math.random(20, 100)
 
       -- Update the context
       context.prev_triple = triple
